@@ -1,0 +1,65 @@
+#define BLYNK_TEMPLATE_ID "TMPL3YFdn9L-F"
+#define BLYNK_TEMPLATE_NAME "LED Brightness controller "
+#define BLYNK_AUTH_TOKEN "FkokZNU7j9AVWLE3Lp-anEpplz9tlKvo"
+
+#define BLYNK_PRINT Serial 
+
+#include <WiFi.h>
+#include <BlynkSimpleEsp32.h>
+
+char ssid[] = "Pavi"; 
+char pass[] = "pavi 0211";
+
+const int LED_PIN = 4; 
+
+int brightness = 0; 
+bool ledState = false;
+
+BLYNK_WRITE(V0) 
+{
+  brightness = param.asInt(); 
+  Serial.print("Brightness set to: ");
+  Serial.println(brightness);
+  updateLED();
+}
+
+BLYNK_WRITE(V1) 
+{
+  ledState = param.asInt();
+  Serial.print("LED turned ");
+  Serial.println(ledState ? "ON" : "OFF");
+  updateLED(); 
+}
+
+// Function to update LED based on switch state and brightness
+void updateLED() 
+{
+  if (ledState) 
+  {
+    analogWrite(LED_PIN, brightness);
+  } 
+  else 
+  {
+    analogWrite(LED_PIN, 0);
+  }
+}
+
+void setup() 
+{
+  Serial.begin(115200);
+  Serial.println("Starting ESP32...");
+  
+  pinMode(LED_PIN, OUTPUT);
+  analogWrite(LED_PIN, 0); 
+  
+  Serial.println("Connecting to WiFi and Blynk...");
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+  
+  Serial.println("✓ Connected successfully!");
+  Serial.println("✓ LED Control Ready!");
+}
+
+void loop() 
+{
+  Blynk.run(); 
+}
