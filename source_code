@@ -1,0 +1,76 @@
+String color;
+
+int redPin = 11;
+int greenPin = 10;
+int bluePin = 9;
+
+void setup()
+ {
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+
+  analogWrite(redPin, 0);
+  analogWrite(greenPin, 0);
+  analogWrite(bluePin, 0);
+
+  Serial.begin(9600);
+  Serial.println("RGB LED Ready");
+  Serial.println("Enter color: red, green, blue, yellow, cyan, magenta, white, off");
+}
+
+void loop()
+ {
+  if (Serial.available())
+   {
+
+    color = Serial.readStringUntil('\n');
+    color.trim();
+
+    analogWrite(redPin, 0);
+    analogWrite(greenPin, 0);
+    analogWrite(bluePin, 0);
+
+    if (color == "red")
+    {
+      analogWrite(redPin, 255);
+    }
+    else if (color == "green")
+    {
+      analogWrite(greenPin, 255);
+    }
+    else if (color == "blue")
+    {
+      analogWrite(bluePin, 255);
+    }
+    else if (color == "yellow")
+    {
+      analogWrite(redPin, 255);
+      analogWrite(greenPin, 255);
+    }
+    else if (color == "cyan")
+    {
+      analogWrite(greenPin, 255);
+      analogWrite(bluePin, 255);
+    }
+    else if (color == "magenta")
+    {
+      analogWrite(redPin, 255);
+      analogWrite(bluePin, 255);
+    }
+    else if (color == "white")
+    {
+      analogWrite(redPin, 255);
+      analogWrite(greenPin, 255);
+      analogWrite(bluePin, 255);
+    }
+    else if (color == "off")
+    {
+      // LED remains OFF
+    }
+    else
+    {
+      Serial.println("Invalid color!");
+    }
+  }
+}
